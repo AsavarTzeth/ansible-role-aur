@@ -1,0 +1,8 @@
+This ansible module includes a simple patch that makes it work on an up-to-date
+Arch Linux distribution.
+
+All changes may be found at:
+https://github.com/AsavarTzeth/ansible-makepkg/tree/urlunsplit_fix
+
+The original may be found at:
+https://github.com/gunzy83/ansible-makepkg
