@@ -1,6 +1,7 @@
 ---
 - name: remount /tmp
   command: mount -o remount /tmp
+  changed_when: false
   args:
     warn: false
   become: true
