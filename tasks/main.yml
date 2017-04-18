@@ -1,5 +1,17 @@
 ---
 - block:
+  - name: install dependencies
+    pacman:
+      name: base-devel
+      update_cache: true
+
+  - name: setup makepkg/wrapper config
+    template:
+      src: "{{ item }}.j2"
+      dest: "/etc/{{ item }}"
+      mode: 0644
+    with_items: "{{ aur_files }}"
+
   - name: get /tmp mount options
     shell: 'cat /proc/mounts | egrep "\s/tmp\s" | awk "{ print $4 }"'
     changed_when: false
@@ -13,11 +25,6 @@
       warn: false
     when: aur_tmp_mnt_opt.stdout.find('noexec') != -1
     notify: remount /tmp
-
-  - name: install dependencies
-    pacman:
-      name: base-devel
-      update_cache: true
 
   - name: setup build dir
     file:
@@ -34,13 +41,6 @@
       build_dir: "{{ aur_work_dir }}"
     with_items: "{{ aur.install | default(aur_default_install) }}"
     ignore_errors: true
-
-  - name: setup yaourtrc
-    template:
-      src: "{{ item }}.j2"
-      dest: "/etc/{{ item }}"
-      mode: 0644
-    with_items: "{{ aur_files }}"
 
   rescue:
   - meta: flush_handlers
